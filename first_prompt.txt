@@ -1,0 +1,72 @@
+Minecraft Mod Specification: EasyEntityRide
+目的: Minecraft Java Edition 1.21 用のクライアントサイドMod「EasyEntityRide」を新規開発するための完全な設計仕様書です。このドキュメントをAIへのプロンプトとして使用することで、バグのない堅牢なModを作成できます。
+
+1. プロジェクト概要
+Mod名: Easy Entity Ride
+Mod ID: easyentityride
+アーカイブ名: easy-entity-ride-mc1.21
+対象バージョン: Minecraft 1.21 / Fabric Loader
+必須依存: Fabric API (0.100.7+1.21 を指定)
+Javaバージョン: 21
+2. コア機能要件
+2.1 動作モード
+クリエイティブモード限定: プレイヤーがクリエイティブモードの時のみ機能する。サバイバルでは何も起きない。
+2.2 エンティティ選択・解除
+操作キー: R キー（デフォルト）。
+選択: エンティティ（マインカート以外）にカーソルを合わせて R。
+解除:
+選択中のエンティティに対して再度 R。
+または、何もない空間（Air）に対して Sneak + R。
+切り替え: 別のエンティティに対して R を押すと、即座にターゲットを切り替える。
+2.3 マウント機能
+操作: エンティティを選択した状態で、マインカートに対して R。
+アクション: クライアントから /ride <entityUuid> mount <minecartUuid> コマンドを送信する。
+事後処理: 成功後、選択状態は自動的に解除される。
+3. 視覚効果とUI (Visual & Feedback)
+3.1 視覚インジケーター (重要: No Glowing)
+禁止事項: バニラの 
+
+Glowing
+ (発光) エフェクトは絶対に使用しない。
+理由: setGlowing(true) はEntityのNBTデータを汚染し、永続的なバグの原因となるため。
+実装方針: パーティクル (Particles) を使用する。
+選択中のエンティティの頭上に、HAPPY_VILLAGER (緑のキラキラ) パーティクルを毎Tickスポーンさせる。
+クライアントサイドの描画処理 (ClientTickEvents または RenderEvents) で完結させること。
+選択解除時、パーティクルは即座に停止する。
+3.2 アクションバー表示
+選択時: Selected: [Entity Name] (緑色)
+解除時: Selection Cleared (黄色)
+マウント成功時: Entity Mounted! (緑色)
+3.3 ログ抑制 (Client-side Log Suppression)
+システムメッセージ commands.ride.mount.success (「～に乗せました」) をチャット欄に表示させない。
+実装: ChatHud.addMessage への Mixin で特定のキーを持つメッセージをキャンセルする。
+4. 技術的アーキテクチャ (Technical Constraints)
+4.1 状態管理
+UUIDベース: 選択中のエンティティは int entityId ではなく java.util.UUID で管理する。
+理由: IDは変わりうるため、UUIDの方が堅牢である。
+切断時のリセット: ワールドから切断時 (ClientPlayConnectionEvents.DISCONNECT)、必ず選択状態変数を null にリセットする。
+4.2 安全性 (Safety)
+Pure Client-side logic: サーバー側のロジックを変更しない。
+State Isolation: 選択解除時に entity.setGlowing(false) などのNBT操作メソッドを絶対に呼ばない。Mod内部の変数 (selectedEntityUuid) を null にするだけで、視覚効果が止まる設計にする。
+5. 推奨ファイル構成
+com.example.easyentityride.EasyEntityRideClient: エントリーポイント。イベント登録。
+com.example.easyentityride.InputHandler: 入力処理と状態管理 (UUID)。
+com.example.easyentityride.RenderHelper: パーティクル描画とアクションバー表示。
+com.example.easyentityride.mixin.MixinChatHud: ログ抑制用 Mixin。
+6. 開発手順 (Prompt用指示)
+
+fabric.mod.json
+, 
+
+gradle.properties
+ を上記設定で作成・更新する。
+
+InputHandler
+ を実装し、UUIDによる状態管理を行う。副作用のあるメソッドは排除する。
+
+RenderHelper
+ を実装し、選択中のUUIDを持つエンティティを探してパーティクルを出す。
+
+MixinChatHud
+ を実装する。
+ビルドして動作確認を行う。

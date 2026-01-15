@@ -1,0 +1,14 @@
+{
+    "required": true,
+    "package": "com.example.easyentityride.mixin",
+    "compatibilityLevel": "JAVA_21",
+    "mixins": [
+        "MixinChatHud"
+    ],
+    "client": [
+        "MixinChatHud"
+    ],
+    "injectors": {
+        "defaultRequire": 1
+    }
+}
