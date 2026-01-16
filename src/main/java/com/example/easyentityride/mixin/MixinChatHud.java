@@ -18,8 +18,21 @@ public class MixinChatHud {
             CallbackInfo ci) {
         if (message.getContent() instanceof TranslatableTextContent translatable) {
             String key = translatable.getKey();
+
+            // Always suppress Vanilla "Mounted" message
             if ("commands.ride.mount.success".equals(key)) {
                 ci.cancel();
+                return;
+            }
+
+            // Conditionally suppress Vanilla "Dismounted" message
+            if ("commands.ride.dismount.success".equals(key)
+                    && com.example.easyentityride.EasyEntityRideClient.shouldSuppressDismount) {
+                ci.cancel();
+                // We consume the flag here (or we could let InputHandler logic handle timing,
+                // but consuming here is safer to avoid suppressing legit messages later)
+                // However, there might be multiple messages? Usually just one.
+                com.example.easyentityride.EasyEntityRideClient.shouldSuppressDismount = false;
             }
         }
     }

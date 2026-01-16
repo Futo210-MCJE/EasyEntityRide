@@ -114,17 +114,56 @@ public class InputHandler {
         if (selectedEntityUuid == null)
             return;
 
+        // Find the actual entity object from UUID (need it to check name and vehicle
+        // status)
+        Entity selectedEntity = null;
+        for (Entity e : client.world.getEntities()) {
+            if (e.getUuid().equals(selectedEntityUuid)) {
+                selectedEntity = e;
+                break;
+            }
+        }
+
+        // If entity is not loaded/found, we can't do the smart checks, so fallback to
+        // just sending mount.
+        // But if found:
+        if (selectedEntity != null) {
+            if (selectedEntity.hasVehicle()) {
+                // Set flag to suppress the NEXT dismount message from vanilla
+                EasyEntityRideClient.shouldSuppressDismount = true;
+
+                // Dismount first
+                client.player.networkHandler
+                        .sendChatCommand(String.format("ride %s dismount", selectedEntityUuid.toString()));
+
+                // Send custom styled message
+                // [EasyEntityRide] (Gold) remounted (Green) [Name] (Yellow) to the minecart!
+                // (Green)
+                Text name = selectedEntity.getDisplayName();
+                if (name == null)
+                    name = Text.literal("Entity");
+
+                Text styledMessage = Text.literal("")
+                        .append(Text.literal("[EasyEntityRide] ").formatted(Formatting.GOLD))
+                        .append(Text.literal("remounted ").formatted(Formatting.GREEN))
+                        .append(Text.literal("").append(name).formatted(Formatting.YELLOW))
+                        .append(Text.literal(" to the minecart!").formatted(Formatting.GREEN));
+
+                client.player.sendMessage(styledMessage, false);
+            } else {
+                client.player.sendMessage(Text.literal("Entity Mounted!").formatted(Formatting.GREEN), true);
+            }
+        } else {
+            // Fallback success message
+            client.player.sendMessage(Text.literal("Entity Mounted!").formatted(Formatting.GREEN), true);
+        }
+
         // Execute command: /ride <selectedUuid> mount <minecartUuid>
         String command = String.format("ride %s mount %s", selectedEntityUuid.toString(),
                 minecart.getUuid().toString());
 
         // Client-side command execution (sending to server)
         client.player.networkHandler.sendChatCommand(command);
-
-        // Visual feedback handled by ActionBar (suppressed via Mixin, so we might want
-        // to show our own success message here or rely on the visual indicator of them
-        // riding)
-        client.player.sendMessage(Text.literal("Entity Mounted!").formatted(Formatting.GREEN), true);
 
         // Reset state
         selectedEntityUuid = null;

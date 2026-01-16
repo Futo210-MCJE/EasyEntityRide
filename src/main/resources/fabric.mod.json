@@ -5,13 +5,13 @@
 	"name": "Easy Entity Ride",
 	"description": "A client-side mod that allows easy mounting of entities in Creative mode.",
 	"authors": [
-		"Me"
+		"Futo210"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://github.com/Futo210-MCJE/EasyEntityRide",
+		"sources": "https://github.com/Futo210-MCJE/EasyEntityRide"
 	},
-	"license": "CC0-1.0",
+	"license": "Not Specified",
 	"icon": "assets/easyentityride/icon.png",
 	"environment": "client",
 	"entrypoints": {

@@ -9,6 +9,9 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 @Environment(EnvType.CLIENT)
 public class EasyEntityRideClient implements ClientModInitializer {
 
+    // Flag for conditional log suppression
+    public static boolean shouldSuppressDismount = false;
+
     @Override
     public void onInitializeClient() {
         // Register Input Handler (KeyBinding, Selection Logic)
@@ -20,6 +23,7 @@ public class EasyEntityRideClient implements ClientModInitializer {
         // Register Event to clear state on disconnect
         ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> {
             InputHandler.resetState();
+            shouldSuppressDismount = false;
         });
     }
 }
