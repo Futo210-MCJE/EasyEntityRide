@@ -14,6 +14,9 @@ public class EasyEntityRideClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
+        // Load Config
+        ConfigHandler.load();
+
         // Register Input Handler (KeyBinding, Selection Logic)
         InputHandler.register();
 

@@ -61,7 +61,7 @@ public class RenderHandler {
             double offsetZ = (client.world.random.nextDouble() - 0.5) * targetEntity.getWidth();
 
             client.world.addParticle(
-                    ParticleTypes.HAPPY_VILLAGER,
+                    ConfigHandler.getParticleType(),
                     x + offsetX,
                     y,
                     z + offsetZ,

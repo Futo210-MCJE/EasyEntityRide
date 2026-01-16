@@ -12,11 +12,14 @@
 		"sources": "https://github.com/Futo210-MCJE/EasyEntityRide"
 	},
 	"license": "Not Specified",
-	"icon": "assets/easyentityride/icon.png",
+	"icon": "assets/icon.png",
 	"environment": "client",
 	"entrypoints": {
 		"client": [
 			"com.example.easyentityride.EasyEntityRideClient"
+		],
+		"modmenu": [
+			"com.example.easyentityride.ModMenuIntegration"
 		]
 	},
 	"mixins": [
