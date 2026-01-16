@@ -12,8 +12,13 @@ public class ConfigScreen extends Screen {
     private TextFieldWidget particleField;
     private Text feedbackText = Text.empty();
 
+    private static final Text TITLE_TEXT = Text.literal("EasyEntityRide Config");
+    private static final Text HELP_TEXT = Text
+            .literal("Enter the particle name (e.g. flame, heart) to change the selection effect.");
+    private static final Text LABEL_TEXT = Text.literal("Particle Name");
+
     public ConfigScreen(Screen parent) {
-        super(Text.literal("EasyEntityRide Config"));
+        super(TITLE_TEXT);
         this.parent = parent;
     }
 
@@ -82,11 +87,11 @@ public class ConfigScreen extends Screen {
 
         // Draw Help Text
         context.drawCenteredTextWithShadow(this.textRenderer,
-                Text.literal("Enter the particle name (e.g. flame, heart) to change the selection effect."),
+                HELP_TEXT,
                 this.width / 2, 40, 0xAAAAAA);
 
         // Draw Label
-        context.drawTextWithShadow(this.textRenderer, Text.literal("Particle Name"), this.width / 2 - 100,
+        context.drawTextWithShadow(this.textRenderer, LABEL_TEXT, this.width / 2 - 100,
                 this.height / 2 - 35, 0xA0A0A0);
 
         // Draw Feedback

@@ -3,7 +3,6 @@ package com.example.easyentityride;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
-import net.minecraft.particle.ParticleTypes;
 import java.util.UUID;
 
 public class RenderHandler {
