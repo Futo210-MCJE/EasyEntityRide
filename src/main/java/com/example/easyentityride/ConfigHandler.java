@@ -54,7 +54,7 @@ public class ConfigHandler {
             return ParticleTypes.HAPPY_VILLAGER;
         }
 
-        // Fix logic: Parse string (e.g. "minecraft:flame" or "flame") to ParticleType
+        // Parse string (e.g. "minecraft:flame" or "flame") to ParticleType
         Identifier id = Identifier.tryParse(name);
         if (id == null)
             return ParticleTypes.HAPPY_VILLAGER;
@@ -66,10 +66,7 @@ public class ConfigHandler {
 
         if (Registries.PARTICLE_TYPE.containsId(id)) {
             ParticleType<?> type = Registries.PARTICLE_TYPE.get(id);
-            // Verify it is a simple particle type (complex ones need data, safe to cast for
-            // simple ones usually?
-            // Actually most simple particles are DefaultParticleType which implements
-            // ParticleEffect)
+            // Verify it is a simple particle type that can be rendered directly
             if (type instanceof ParticleEffect) {
                 return (ParticleEffect) type;
             }
