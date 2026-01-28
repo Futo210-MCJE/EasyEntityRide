@@ -1,9 +1,10 @@
 package com.example.easyentityride;
 
-import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
@@ -78,24 +79,26 @@ public class ConfigScreen extends Screen {
     }
 
     @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        this.renderBackground(context);
-        super.render(context, mouseX, mouseY, delta);
+    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+        this.renderBackground(matrices);
+        super.render(matrices, mouseX, mouseY, delta);
 
         // Draw Title
-        context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 20, 0xFFFFFF);
+        DrawableHelper.drawCenteredTextWithShadow(matrices, this.textRenderer, this.title, this.width / 2, 20,
+                0xFFFFFF);
 
         // Draw Help Text
-        context.drawCenteredTextWithShadow(this.textRenderer,
+        DrawableHelper.drawCenteredTextWithShadow(matrices, this.textRenderer,
                 HELP_TEXT,
                 this.width / 2, 40, 0xAAAAAA);
 
         // Draw Label
-        context.drawTextWithShadow(this.textRenderer, LABEL_TEXT, this.width / 2 - 100,
+        DrawableHelper.drawTextWithShadow(matrices, this.textRenderer, LABEL_TEXT, this.width / 2 - 100,
                 this.height / 2 - 35, 0xA0A0A0);
 
         // Draw Feedback
-        context.drawCenteredTextWithShadow(this.textRenderer, this.feedbackText, this.width / 2, this.height / 2 + 50,
+        DrawableHelper.drawCenteredTextWithShadow(matrices, this.textRenderer, this.feedbackText, this.width / 2,
+                this.height / 2 + 50,
                 0xFFFFFF);
     }
 
